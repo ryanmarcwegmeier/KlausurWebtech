@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<script type="text/javascript">
+		
+
+		function isEqual(obj1,obj2){
+			var keys1=Object.keys(obj1)
+			var keys2=Object.keys(obj2)
+			var b=0;
+			if(keys1.length==keys2.length){
+				for(let i=0;i<keys1.length;i++){
+					if(keys1[i]!=keys2[i]){
+						console.log("iher")
+						b=1
+					}
+				}
+
+				if (b!=1) {
+					var values1=Object.values(obj1);
+					var values2=Object.values(obj2);
+					for(let i=0;i<values1.length;i++){
+						if(values1[i]!=values2[i])b=1
+					}
+				}
+				return (b==0)?true:false;
+
+
+			}
+
+		}
+
+		function Lehrveranstaltungen(name,raum,zeit,studenten){
+			this.name=name;
+			this.raum=raum;
+			this.zeit=zeit
+			this.studenten=studenten
+		}
+		Lehrveranstaltungen.prototype.registrieren=function(student){
+			this.studenten.push(student)
+		}
+		Lehrveranstaltungen.prototype.abmelden=function(student){
+			this.studenten=this.studenten.filter(e=>!isEqual(e,student))
+		}
+
+		function Vorlesung(name,raum,zeit,studenten){
+			Lehrveranstaltungen.call(this,name,raum,zeit,studenten)
+		}
+
+		Object.setPrototypeOf(Vorlesung.prototype, Lehrveranstaltungen.prototype)
+
+		function Seminar(name,raum,zeit,studenten){
+			Lehrveranstaltungen.call(this,name,raum,zeit,studenten)
+		}
+
+		Object.setPrototypeOf(Seminar.prototype, Lehrveranstaltungen.prototype)
+
+		Seminar.prototype.registrieren=function(student){
+			if(this.studenten.length!=10){
+				this.studenten.push(student)
+			}else{
+				console.log("VOLL")
+			}
+		}
+
+
+
+
+
+
+
+
+
+
+
+
+	</script>
+</head>
+<body>
+	<button onclick="start()">Start</button>
+
+</body>
+</html>

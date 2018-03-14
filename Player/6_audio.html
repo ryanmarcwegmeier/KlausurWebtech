@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<style type="text/css">
+		
+	#regler{
+		width: 400px;
+	}
+
+	#ton{
+		width: 50px;
+
+	}
+
+	#speed{
+		width: 50px;
+	}
+
+
+	input[type=range] {
+  -webkit-appearance: none;
+  width: 100%;
+  margin: 1.35px 0;
+}
+input[type=range]:focus {
+  outline: none;
+}
+input[type=range]::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 10.3px;
+  cursor: pointer;
+  box-shadow: 0px 0px 1px #000000, 0px 0px 0px #0d0d0d;
+  background: rgba(162, 110, 151, 0.88);
+  border-radius: 25px;
+  border: 1px solid #000101;
+}
+input[type=range]::-webkit-slider-thumb {
+  box-shadow: 2px 2px 2.4px #000000, 0px 0px 2px #0d0d0d;
+  border: 1px solid #000000;
+  height: 13px;
+  width: 24px;
+  border-radius: 50px;
+  background: #6f6f6f;
+  cursor: pointer;
+  -webkit-appearance: none;
+  margin-top: -2.35px;
+}
+input[type=range]:focus::-webkit-slider-runnable-track {
+  background: rgba(172, 126, 162, 0.88);
+}
+input[type=range]::-moz-range-track {
+  width: 100%;
+  height: 10.3px;
+  cursor: pointer;
+  box-shadow: 0px 0px 1px #000000, 0px 0px 0px #0d0d0d;
+  background: rgba(162, 110, 151, 0.88);
+  border-radius: 25px;
+  border: 1px solid #000101;
+}
+input[type=range]::-moz-range-thumb {
+  box-shadow: 2px 2px 2.4px #000000, 0px 0px 2px #0d0d0d;
+  border: 1px solid #000000;
+  height: 13px;
+  width: 24px;
+  border-radius: 50px;
+  background: #6f6f6f;
+  cursor: pointer;
+}
+
+
+
+
+
+
+	</style>
+
+
+	<script type="text/javascript">
+
+		function Song(name,file){
+			this.name=name;
+			this.file=file;
+		}
+
+		var songs=[]
+		
+		function doSth(){
+			var selector=document.querySelector("select");
+			
+			songs.push(new Song("random" , new Audio("D:/Webtech/Klausur/Player/file1.mp3")))
+			songs.push(new Song("panda" , new Audio("D:/Webtech/Klausur/Player/file2.mp3")))
+
+			songs.forEach(e=>{
+				var option=document.createElement("option");
+				var text=document.createTextNode(e.name);
+				option.appendChild(text);
+				selector.appendChild(option)
+			})
+
+			change();
+			ton();
+			speed();
+			
+		}
+
+		var ison=false;
+		function play(){
+
+			
+			if(document.getElementById("music").currentTime==0){
+				document.getElementById("regler").value=0;
+			}
+
+			music.play()
+
+		}
+
+		function timeupdate(){
+			document.getElementById("regler").value=100*document.getElementById("music").currentTime/document.getElementById("music").duration
+			if(document.getElementById("music").currentTime==document.getElementById("music").duration){
+				next()
+			}
+		}
+
+		function pause(){
+			document.getElementById("music").pause()
+
+		}
+
+		function regeln(element){
+			var music=document.getElementById("music");
+			music.currentTime=element.value*music.duration/100
+		}
+
+		function change(){
+			var sel=document.querySelector("select").value;
+			var tr=songs.filter(e=>e.name==sel)[0].file.src;
+			document.getElementById("track").src=tr;
+			var music = document.getElementById('music');
+
+			music.load()
+
+
+
+		}
+		
+		function ton(){
+			var music=document.getElementById("music")
+			music.volume=document.getElementById("ton").value
+		}
+
+		function speed(){
+			var music=document.getElementById("music")
+			music.playbackRate=document.getElementById("speed").value
+
+		}
+
+		function next(){
+			let list=document.querySelectorAll("option")
+			var nextE=list[0]
+			for(let y=0;y<list.length;y++){
+				if (list[y].value == document.querySelector("select").value && y!=list.length-1){
+					nextE=list[y+1];
+					document.querySelector("select").value=list[y+1].value
+					change();
+					play();
+					break;
+				}
+			}
+
+
+		}
+
+
+		function back(){
+			let list=document.querySelectorAll("option")
+			var nextE=list[0]
+			for(let y=0;y<list.length;y++){
+				if (list[y].value == document.querySelector("select").value && y!=0){
+					nextE=list[y-1];
+					document.querySelector("select").value=list[y-1].value
+					change();
+					play();
+					break;
+				}
+			}
+
+
+		}
+
+		function shuffleArray(array) {
+ 			var currentIndex = array.length, temporaryValue, randomIndex;
+
+  // While there remain elements to shuffle...
+			  while (0 !== currentIndex) {
+
+    // Pick a remaining element...
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex -= 1;
+
+    // And swap it with the current element.
+    temporaryValue = array[currentIndex];
+    array[currentIndex] = array[randomIndex];
+    array[randomIndex] = temporaryValue;
+  }
+
+  return array;
+}
+
+		function shuffle(){
+			songs=shuffleArray(songs)
+
+			var selector = document.querySelector("select")
+
+			while (selector.firstChild) {
+ 			 selector.removeChild(selector.firstChild);
+			}
+
+			songs.forEach(e=>{
+				var option=document.createElement("option");
+				var text=document.createTextNode(e.name);
+				option.appendChild(text);
+				selector.appendChild(option)
+			})
+
+			change();
+			ton();
+			speed();
+		}
+
+
+
+	</script>
+</head>
+<body onload="doSth()">
+	<h1>HTML 5 Audio Player</h1>
+ 
+    <div class="container gradient">
+         
+        <img class="cover" src="https://www.br.de/puls/musik/aktuell/musikalische-anhedonie-104~_v-img__16__9__l_-1dc0e8f74459dd04c91a0d45af4972b9069f1135.jpg?version=113a7" alt="">
+ 	
+        <audio id=music ontimeupdate="timeupdate()" controls>
+        	<source id=track src="" type="audio/mpeg">
+        </audio>
+
+        <div class="player">
+ 
+            
+			<input type="button" id="play" name="" value="Play" onclick="play()">
+			<input type="button" id="pause" name="" value="Pause" onclick="pause()">       
+       		<input type="range" id="ton" value="1" max="1" onchange="ton()" step="0.01" />
+
+            <input type="range" id="regler" value="0" max="100"/ onclick="regeln(this)">
+            <input type="range" id="speed"  min ="0.25" max="2" step="0.25" value="1" onchange="speed()" />
+			<input type="button" id="back" name="" value="<" onclick="back()">
+			<input type="button" id="next" name="" value=">" onclick="next()">
+			<input type="button" id="shuffle" name="" value="shuffle" onclick="shuffle()" >
+			<select onchange="change()">
+ 				 
+			</select>
+
+
+             
+        </div><!-- / player -->
+
+         
+    </div><!-- / Container-->
+
+
+
+
+
+</body>
+</html>

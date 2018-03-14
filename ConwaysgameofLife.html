@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+	<script type="text/javascript">
+		
+
+
+function Cell(live, ol=null, o=null, or=null, r=null, ur=null, u=null, ul=null, l=null){
+	this.live=live;
+	this.ol=ol
+	this.o=o;
+	this.or=or;
+	this.r=r;
+	this.ur=ur;
+	this.u=u;
+	this.ul=ul
+	this.l=l;
+
+}
+
+function rand(){
+	let r=Math.random();
+	return (r>0.5)?true:false
+}
+
+function start(){
+
+	zellList=Array();
+	for (let i = 1 ; i <= 100;i++){
+		zellList.push({"key":i, "value": new Cell(rand())})
+	}
+
+	var spielfeld=createSpielfeld(zellList)
+}
+
+
+
+	</script>
+	<title></title>
+</head>
+<body>
+	<button onclick="start()">Click</button>
+
+</body>
+</html>
